@@ -7,6 +7,7 @@ import ProductModal from '../components/ProductModal';
 import DelProductModal from '../components/DelProductModal';
 // const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
 // const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
+import Toast from '../components/Toast';
 
 const defaultModalState = {
   imageUrl: '',
@@ -22,9 +23,7 @@ const defaultModalState = {
 };
 
 const AdminProductPage = ({ setIsAuth }) => {
-  const {
-    value: { products, pageInfo, getAdminProducts },
-  } = useAdmin();
+  const { products, pageInfo, getAdminProducts } = useAdmin();
   const [tempProduct, setTempProduct] = useState(defaultModalState);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState(null);
@@ -139,6 +138,8 @@ const AdminProductPage = ({ setIsAuth }) => {
         isOpen={isDelProductModalOpen}
         setIsOpen={setIsDelProductModalOpen}
       />
+
+      <Toast />
     </>
   );
 };

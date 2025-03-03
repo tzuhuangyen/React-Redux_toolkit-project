@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Pagination from '../components/Pagination';
+import ProductModal from '../components/ProductModal';
 import { Link } from 'react-router-dom';
 import ReactLoading from 'react-loading';
 const BASE_URL = import.meta.env.VITE_API_hexAPIUrl;
@@ -8,10 +10,11 @@ const API_PATH = import.meta.env.VITE_API_hexAPIPath;
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
+  const [tempProduct, setTempProduct] = useState({});
+
   const [loadingState, setLoadingState] = useState(false);
   const [isScreenLoading, setIsScreenLoading] = useState(false);
   const [loadingItem, setLoadingItem] = useState('');
-
   //產品列表 getProducts
   useEffect(() => {
     const getProducts = async () => {
@@ -53,8 +56,9 @@ const ProductsPage = () => {
       setLoadingItem('');
     }
   };
+
   return (
-    <div className='container'>
+    <div className='container productPage'>
       <table className='table align-middle'>
         <thead>
           <tr>
@@ -109,6 +113,7 @@ const ProductsPage = () => {
           ))}
         </tbody>
       </table>
+
       {isScreenLoading && (
         <div
           className='d-flex justify-content-center align-items-center'

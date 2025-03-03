@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAdmin } from '../contexts/AdminContext';
 const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
-// const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
+const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
 
 const LoginPage = ({ setIsAuth }) => {
   const { getAdminProducts } = useAdmin();

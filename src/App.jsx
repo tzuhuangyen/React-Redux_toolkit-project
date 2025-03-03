@@ -2,7 +2,6 @@ import { useState } from 'react';
 // import axios from 'axios';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './components/Header';
 import MainComponent from './components/MainComponent';
 import SideBar from './components/SideBar';
 import AdminUploadFile from './AdminUploadFile';
@@ -54,10 +53,9 @@ function App() {
         {/* 當 loadingState 為 true 時顯示 Loading 組件 */}
         {/* 登入和未登入畫面 */}
         <div className='container'>
-          <Header />
           {/* 管理員已登入顯示主要內容 */}
 
-          {/* {isAuth ? (
+          {isAuth ? (
             <>
               <div className='row'>
                 <div className='col-md-2'>
@@ -72,6 +70,12 @@ function App() {
                     // products={products}
                   />
                   <AdminUploadFile />
+                  <button
+                    onClick={() => setIsAuth(false)}
+                    className='btn btn-danger mt-3'
+                  >
+                    登出
+                  </button>
                 </div>
               </div>
             </>
@@ -81,7 +85,7 @@ function App() {
               setIsAuth={setIsAuth}
               // getAdminProducts={getAdminProducts}
             />
-          )} */}
+          )}
         </div>
         <AddCart />
         <p className='mt-5 mb-3 text-muted text-center'>

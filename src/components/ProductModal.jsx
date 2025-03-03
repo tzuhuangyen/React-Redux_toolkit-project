@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 import { useAdmin } from '../contexts/AdminContext';
+import { useDispatch } from 'react-redux';
+import { pushMessage } from '../slices/toastSlice';
 
 const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
 const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
@@ -23,7 +25,9 @@ const ProductModal = ({
 
   useEffect(() => {
     // console.log(productModalRef.current);
-    new Modal(productModalRef.current, { backdrop: false }); // 初始化 Modal
+    if (productModalRef.current) {
+      new Modal(productModalRef.current, { backdrop: false }); // 初始化 Modal
+    }
     // console.log(Modal.getInstance(productModalRef.current)); // 顯示 Modal
   }, []);
 
@@ -36,8 +40,17 @@ const ProductModal = ({
 
   const handleCloseProductModal = () => {
     const modalInstance = Modal.getInstance(productModalRef.current);
-    modalInstance.hide(); // 顯示 Modal
+    if (modalInstance) {
+      modalInstance.hide();
+    }
     setIsOpen(false);
+    // 將焦點移動到模態框觸發按鈕或其他安全的地方
+    const triggerButton = document.querySelector(
+      '[data-bs-target="#productModal"]'
+    );
+    if (triggerButton) {
+      triggerButton.focus();
+    }
   };
   const handleOpenDelProductModal = (product) => {
     setModalData(product);
@@ -48,6 +61,7 @@ const ProductModal = ({
     const modalInstance = Modal.getInstance(delProductModalRef.current);
     modalInstance.hide();
   };
+  const dispatch = useDispatch();
   const createProduct = async () => {
     try {
       await axios.post(`${hexAPIUrl}/api/${hexAPIPath}/admin/product`, {
@@ -58,9 +72,15 @@ const ProductModal = ({
           is_enabled: modalData.is_enabled ? 1 : 0,
         },
       });
+      dispatch(
+        pushMessage({
+          text: 'Product created successfully!',
+          status: 'success',
+        })
+      );
     } catch (error) {
-      alert('新增失敗');
-      console.error('新增失敗：', error);
+      const { message } = error.response.data;
+      dispatch(pushMessage({ text: message.join(','), status: 'Failed' }));
     }
   };
 
@@ -77,9 +97,12 @@ const ProductModal = ({
           },
         }
       );
+      console.log('Product created successfully');
+      dispatch(pushMessage({ text: 'success', status: 'success' }));
     } catch (error) {
       alert('更新失敗');
       console.error('更新失敗：', error);
+      dispatch(pushMessage({ text: message.join(','), status: 'Failed' }));
     }
   };
   const handleUpdateProduct = async () => {

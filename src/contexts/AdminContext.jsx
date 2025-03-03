@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 import axios from 'axios';
+const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
+const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
 
 const AdminContext = createContext(null);
 
@@ -8,15 +10,12 @@ export const AdminProvider = ({ children }) => {
   const [pageInfo, setPageInfo] = useState({});
   const [loadingState, setLoadingState] = useState(false);
 
-  const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
-  const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
-
   const getAdminProducts = useCallback(
     async (page = 1) => {
       setLoadingState(true);
       try {
         const response = await axios.get(
-          `${hexAPIUrl}/api/${hexAPIPath}/admin/products?page=${page}`
+          `${hexAPIUrl}api/${hexAPIPath}/admin/products?page=${page}`
         );
         if (response.data.success) {
           setProducts(response.data.products);
@@ -41,13 +40,7 @@ export const AdminProvider = ({ children }) => {
     getAdminProducts,
   };
   return (
-    <AdminContext.Provider
-      value={{
-        value,
-      }}
-    >
-      {children}
-    </AdminContext.Provider>
+    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
   );
 };
 
