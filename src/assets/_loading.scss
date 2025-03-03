@@ -1,0 +1,61 @@
+/* Loading.scss */
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.plane-loader {
+  position: relative;
+  width: 300px;
+  height: 100px;
+}
+
+.plane {
+  position: absolute;
+  font-size: 24px;
+  color: #0284c7;
+  animation: moveInCircles 6s infinite linear;
+  transform-origin: center;
+  offset-path: path(
+    'M 50,50 C 50,20 80,20 80,50 C 80,80 50,80 50,50 C 50,20 80,20 80,50 L 80,50 C 120,50 150,20 150,50 C 150,80 120,80 120,50 C 120,20 150,20 150,50'
+  );
+  offset-rotate: auto;
+}
+
+.dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: #93c5fd;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+@keyframes moveInCircles {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes dotFade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
