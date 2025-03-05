@@ -5,9 +5,10 @@ import { useAdmin } from '../contexts/AdminContext'; // 添加這行
 import Pagination from '../components/Pagination';
 import ProductModal from '../components/ProductModal';
 import DelProductModal from '../components/DelProductModal';
-// const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
+const hexAPIUrl = import.meta.env.VITE_API_hexAPIUrl;
 // const hexAPIPath = import.meta.env.VITE_API_hexAPIPath;
 import Toast from '../components/Toast';
+import axios from 'axios';
 
 const defaultModalState = {
   imageUrl: '',
@@ -54,6 +55,15 @@ const AdminProductPage = ({ setIsAuth }) => {
   //換分頁
   const handlePageChange = (page) => {
     getAdminProducts(page);
+  };
+  //登出
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${hexAPIUrl}logout`);
+      setIsAuth(false);
+    } catch (error) {
+      alert('登出失敗，請稍後再試');
+    }
   };
 
   return (
@@ -140,6 +150,17 @@ const AdminProductPage = ({ setIsAuth }) => {
       />
 
       <Toast />
+      <div className='row mb-3'>
+        <div className='d-flex justify-content-end'>
+          <button
+            onClick={handleLogout}
+            type='button'
+            className='btn btn-secondary'
+          >
+            登出
+          </button>
+        </div>
+      </div>
     </>
   );
 };

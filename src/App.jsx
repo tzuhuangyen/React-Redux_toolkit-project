@@ -1,7 +1,6 @@
 import { useState } from 'react';
 // import axios from 'axios';
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import MainComponent from './components/MainComponent';
 import SideBar from './components/SideBar';
 import AdminUploadFile from './AdminUploadFile';
