@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Modal } from 'bootstrap';
 import { set, useForm } from 'react-hook-form';
 import ReactLoading from 'react-loading';
-
+import { Link } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_API_hexAPIUrl;
 const API_PATH = import.meta.env.VITE_API_hexAPIPath;
 
@@ -148,7 +148,7 @@ const CartPage = () => {
     <div className='container-fluid'>
       <div className='container'>
         <div className='mt-3'>
-          <h3 className='mt-3 mb-4'>Lorem ipsum</h3>
+          <h3 className='mt-3 mb-4'>Cart</h3>
           <div className='row'>
             <div className='col-md-8'>
               <table className='table'>
@@ -193,6 +193,13 @@ const CartPage = () => {
                         <div className='input-group pe-5'>
                           <div className='input-group-prepend'>
                             <button
+                              onClick={() =>
+                                updateCartItem(
+                                  cartItem.id,
+                                  cartItem.product.id,
+                                  cartItem.qty - 1
+                                )
+                              }
                               className='btn btn-outline-dark border-0 py-2'
                               type='button'
                               id='button-addon1'
@@ -206,10 +213,17 @@ const CartPage = () => {
                             placeholder=''
                             aria-label='Example text with button addon'
                             aria-describedby='button-addon1'
-                            value='1'
+                            value={cartItem.qty}
                           />
                           <div className='input-group-append'>
                             <button
+                              onClick={() =>
+                                updateCartItem(
+                                  cartItem.id,
+                                  cartItem.product.id,
+                                  cartItem.qty + 1
+                                )
+                              }
                               className='btn btn-outline-dark border-0 py-2'
                               type='button'
                               id='button-addon2'
@@ -221,11 +235,12 @@ const CartPage = () => {
                       </td>
                       <td className='border-0 align-middle'>
                         <p className='mb-0 ms-auto'>
-                          NT${cartItem.final_price}
+                          NT${cartItem.final_total}
                         </p>
                       </td>
                       <td className='border-0 align-middle'>
                         <button
+                          onClick={() => removeCartItem(cartItem.id)}
                           className='btn btn-outline-dark border-0 py-2'
                           type='button'
                           id='button-addon2'
@@ -268,7 +283,9 @@ const CartPage = () => {
                       >
                         Subtotal
                       </th>
-                      <td className='text-end border-0 px-0 pt-4'>NT$24,000</td>
+                      <td className='text-end border-0 px-0 pt-4'>
+                        NT${cart.total}
+                      </td>
                     </tr>
                     <tr>
                       <th
@@ -285,11 +302,11 @@ const CartPage = () => {
                 </table>
                 <div className='d-flex justify-content-between mt-4'>
                   <p className='mb-0 h4 fw-bold'>Total</p>
-                  <p className='mb-0 h4 fw-bold'>NT$24,000</p>
+                  <p className='mb-0 h4 fw-bold'>NT${cart.final_total}</p>
                 </div>
-                <a href='./checkout.html' className='btn btn-dark w-100 mt-4'>
-                  Lorem ipsum
-                </a>
+                <Link to='/checkout-form' className='btn btn-dark w-100 mt-4'>
+                  Check out
+                </Link>
               </div>
             </div>
           </div>
@@ -412,6 +429,19 @@ const CartPage = () => {
           </div>
         </div>
       </div>
+      {isScreenLoading && (
+        <div
+          className='d-flex justify-content-center align-items-center'
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(255,255,255,0.3)',
+            zIndex: 999,
+          }}
+        >
+          <ReactLoading type='spin' color='black' width='4rem' height='4rem' />
+        </div>
+      )}
     </div>
   );
 
