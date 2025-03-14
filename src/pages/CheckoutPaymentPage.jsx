@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function CheckoutPaymentPage() {
+  const [selectedPayment, setSelectedPayment] = useState('cash'); // Default to cash on delivery
+  const handlePaymentChange = (paymentMethod) => {
+    setSelectedPayment(paymentMethod);
+  };
   return (
     <div className='container'>
       <div className='row justify-content-center'>
@@ -28,7 +33,7 @@ export default function CheckoutPaymentPage() {
       </div>
       <div className='row justify-content-center'>
         <div className='col-md-10'>
-          <h3 className='fw-bold mb-4 pt-3'>How to pay</h3>
+          <h3 className='fw-bold mb-4 pt-3'>Payment Methods</h3>
         </div>
       </div>
       <div className='row flex-row-reverse justify-content-center pb-5'>
@@ -97,17 +102,35 @@ export default function CheckoutPaymentPage() {
             <div className='card rounded-0'>
               <div
                 className='card-header bg-white border-0 py-3'
-                id='headingOne'
-                data-bs-toggle='collapse'
-                data-bs-target='#collapseOne'
-                aria-expanded='true'
-                aria-controls='collapseOne'
+                // id='headingOne'
+                // data-bs-toggle='collapse'
+                // data-bs-target='#collapseOne'
+                // aria-expanded='true'
+                // aria-controls='collapseOne'
               >
-                <p className='mb-0 position-relative custom-checkout-label'>
-                  CASH
-                </p>
+                <div className='form-check'>
+                  <input
+                    className='form-check-input'
+                    type='radio'
+                    name='paymentMethod'
+                    id='cashOnDelivery'
+                    checked={selectedPayment === 'cash'}
+                    onChange={() => handlePaymentChange('cash')}
+                  />
+                  <label
+                    className='form-check-label mb-0 position-relative '
+                    htmlFor='cashOnDelivery'
+                  >
+                    Cash On Delivery
+                  </label>
+                </div>
               </div>
-              <div
+              {selectedPayment === 'cash' && (
+                <div className='card-body bg-light ps-5 py-4'>
+                  <p>You will pay when your order is delivered.</p>
+                </div>
+              )}
+              {/* <div
                 id='collapseOne'
                 className='collapse show'
                 aria-labelledby='headingOne'
@@ -116,7 +139,7 @@ export default function CheckoutPaymentPage() {
                 <div className='card-body bg-light ps-5 py-4'>
                   <div className='mb-2'>
                     <label for='Lorem ipsum1' className='text-muted mb-0'>
-                      APPLE APY
+                      test
                     </label>
                     <input
                       type='text'
@@ -127,7 +150,7 @@ export default function CheckoutPaymentPage() {
                   </div>
                   <div className='mb-0'>
                     <label for='Lorem ipsum2' className='text-muted mb-0'>
-                      credit card{' '}
+                      test
                     </label>
                     <input
                       type='text'
@@ -137,110 +160,114 @@ export default function CheckoutPaymentPage() {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
+
+            {/* Credit Card */}
             <div className='card rounded-0'>
-              <div
-                className='card-header bg-white border-0 py-3 collapsed'
-                id='headingTwo'
-                data-bs-toggle='collapse'
-                data-bs-target='#collapseTwo'
-                aria-expanded='true'
-                aria-controls='collapseTwo'
-              >
-                <p className='mb-0 position-relative custom-checkout-label'>
-                  Apple Pay
-                </p>
+              <div className='card-header bg-white border-0 py-3'>
+                <div className='form-check'>
+                  <input
+                    className='form-check-input'
+                    type='radio'
+                    name='paymentMethod'
+                    id='creditCard'
+                    checked={selectedPayment === 'credit'}
+                    onChange={() => handlePaymentChange('credit')}
+                  />
+                  <label
+                    className='form-check-label mb-0 position-relative '
+                    htmlFor='creditCard'
+                  >
+                    Credit Card
+                  </label>
+                </div>
               </div>
-              <div
-                id='collapseTwo'
-                className='collapse'
-                aria-labelledby='headingTwo'
-                data-bs-parent='#accordionExample'
-              >
+              {selectedPayment === 'credit' && (
                 <div className='card-body bg-light ps-5 py-4'>
                   <div className='mb-2'>
-                    <label for='Lorem ipsum1' className='text-muted mb-0'>
-                      Credit card
+                    <label htmlFor='cardNumber' className='text-muted mb-0'>
+                      Credit card Number
                     </label>
                     <input
                       type='text'
                       className='form-control'
-                      id='Lorem ipsum1'
-                      placeholder='Lorem ipsum'
+                      id='cardNumber'
+                      placeholder='Enter card number'
                     />
                   </div>
-                  <div className='mb-0'>
-                    <label for='Lorem ipsum2' className='text-muted mb-0'>
-                      Lorem ipsum
-                    </label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      id='Lorem ipsum2'
-                      placeholder='Lorem ipsum'
-                    />
+                  <div className='d-flex justify-content-between'>
+                    <div className='mb-0 me-2'>
+                      <label htmlFor='expDate' className='text-muted mb-0'>
+                        Expired Date
+                      </label>
+                      <input
+                        type='text'
+                        className='form-control'
+                        id='expDate'
+                        placeholder='MM/YY'
+                      />
+                    </div>
+                    <div className='mb-0'>
+                      <label htmlFor='cvv' className='text-muted mb-0'>
+                        CVV
+                      </label>
+                      <input
+                        type='text'
+                        className='form-control'
+                        id='cvv'
+                        placeholder='123'
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
+            {/* Paypal */}
             <div className='card rounded-0'>
-              <div
-                className='card-header bg-white border-0 py-3 collapsed'
-                id='headingThree'
-                data-bs-toggle='collapse'
-                data-bs-target='#collapseThree'
-                aria-expanded='true'
-                aria-controls='collapseThree'
-              >
-                <p className='mb-0 position-relative custom-checkout-label'>
-                  Paypal
-                </p>
+              <div className='card-header bg-white border-0 py-3'>
+                <div className='form-check'>
+                  <input
+                    className='form-check-input'
+                    type='radio'
+                    name='paymentMethod'
+                    id='paypal'
+                    checked={selectedPayment === 'paypal'}
+                    onChange={() => handlePaymentChange('paypal')}
+                  />
+                  <label
+                    className='form-check-label mb-0 position-relative '
+                    htmlFor='paypal'
+                  >
+                    Paypal
+                  </label>
+                </div>
               </div>
-              <div
-                id='collapseThree'
-                className='collapse'
-                aria-labelledby='headingThree'
-                data-bs-parent='#accordionExample'
-              >
+              {selectedPayment === 'paypal' && (
                 <div className='card-body bg-light ps-5 py-4'>
                   <div className='mb-2'>
-                    <label for='Lorem ipsum1' className='text-muted mb-0'>
-                      Lorem ipsum
+                    <label htmlFor='paypalEmail' className='text-muted mb-0'>
+                      Paypal Email
                     </label>
                     <input
-                      type='text'
+                      type='email'
                       className='form-control'
-                      id='Lorem ipsum1'
-                      placeholder='Lorem ipsum'
-                    />
-                  </div>
-                  <div className='mb-0'>
-                    <label for='Lorem ipsum2' className='text-muted mb-0'>
-                      Lorem ipsum
-                    </label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      id='Lorem ipsum2'
-                      placeholder='Lorem ipsum'
+                      id='paypalEmail'
+                      placeholder='Enter your PayPal email'
                     />
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
-          <div className='d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100'>
-            <Link to='/checkout-success' className='text-dark mt-md-0 mt-3'>
-              <i className='fas fa-chevron-left me-2'></i> Lorem ipsum
-            </Link>
-            <a
-              href='./checkout-success.html'
-              className='btn btn-dark py-3 px-7'
-            >
-              Go to Pay
-            </a>
-          </div>
+        </div>
+        <div className='d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100'>
+          <Link to='/checkout-success' className='text-dark mt-md-0 mt-3'>
+            <i className='fas fa-chevron-left me-2'></i> Lorem ipsum
+          </Link>
+          <a href='./checkout-success.html' className='btn btn-dark py-3 px-7'>
+            Next
+          </a>
         </div>
       </div>
     </div>
