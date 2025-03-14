@@ -262,12 +262,12 @@ export default function CheckoutPaymentPage() {
           </div>
         </div>
         <div className='d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100'>
-          <Link to='/checkout-success' className='text-dark mt-md-0 mt-3'>
-            <i className='fas fa-chevron-left me-2'></i> Lorem ipsum
+          <Link to='/checkout-form' className='text-dark mt-md-0 mt-3'>
+            <i className='fas fa-chevron-left me-2'></i> Back
           </Link>
-          <a href='./checkout-success.html' className='btn btn-dark py-3 px-7'>
-            Next
-          </a>
+          <Link to='/checkout-success' className='btn btn-dark py-3 px-7'>
+            Pay
+          </Link>
         </div>
       </div>
     </div>

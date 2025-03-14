@@ -9,20 +9,56 @@ const BASE_URL = import.meta.env.VITE_API_hexAPIUrl;
 const API_PATH = import.meta.env.VITE_API_hexAPIPath;
 
 const ProductsPage = () => {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
   const [tempProduct, setTempProduct] = useState({});
 
   const [loadingState, setLoadingState] = useState(false);
   const [isScreenLoading, setIsScreenLoading] = useState(false);
   const [loadingItem, setLoadingItem] = useState('');
+  //產品分類
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  //收藏
+  const [wishList, setWishList] = useState(() => {
+    const initWishList = localStorage.getItem('wishList')
+      ? JSON.parse(localStorage.getItem('wishList'))
+      : {};
+
+    return initWishList;
+  });
+
+  const toggleWishListItem = (product_id) => {
+    const newWishList = {
+      ...wishList,
+      [product_id]: !wishList[product_id],
+    };
+    localStorage.setItem('wishList', JSON.stringify(newWishList));
+    setWishList(newWishList);
+  };
+
   //產品列表 getProducts
   useEffect(() => {
-    const getProducts = async () => {
+    // const getProducts = async () => {
+    //   try {
+    //     setIsScreenLoading(true);
+    //     console.log('API URL:', `${BASE_URL}/api/${API_PATH}/products`); // 加入除錯用的 console.log
+    //     const res = await axios.get(`${BASE_URL}/api/${API_PATH}/products`);
+    //     setProducts(res.data.products || []);
+    //   } catch (error) {
+    //     alert('取得產品失敗');
+    //     setProducts([]); // 錯誤時設置為空陣列
+    //   } finally {
+    //     setIsScreenLoading(false);
+    //   }
+    // };
+    // getProducts();
+    const getAllProducts = async () => {
       try {
         setIsScreenLoading(true);
         console.log('API URL:', `${BASE_URL}/api/${API_PATH}/products`); // 加入除錯用的 console.log
-        const res = await axios.get(`${BASE_URL}/api/${API_PATH}/products`);
-        setProducts(res.data.products || []);
+        const res = await axios.get(`${BASE_URL}/api/${API_PATH}/products/all`);
+        setAllProducts(res.data.products || []);
       } catch (error) {
         alert('取得產品失敗');
         setProducts([]); // 錯誤時設置為空陣列
@@ -30,8 +66,21 @@ const ProductsPage = () => {
         setIsScreenLoading(false);
       }
     };
-    getProducts();
+    getAllProducts();
   }, []);
+
+  //產品分類
+  const categories = [
+    'All',
+    ...new Set(allProducts.map((product) => product.category)),
+  ];
+  const filteredProducts = allProducts.filter((product) => {
+    if (selectedCategory === 'All') return product;
+    return product.category === selectedCategory;
+  });
+
+  // 收藏
+
   //加入購物車 addCartItem
   const addCartItem = async (product_id, qty) => {
     if (!product_id) {
@@ -93,7 +142,7 @@ const ProductsPage = () => {
                   data-bs-target='#collapseOne'
                 >
                   <div className='d-flex justify-content-between align-items-center pe-1'>
-                    <h4 className='mb-0'>Lorem ipsum</h4>
+                    <h4 className='mb-0'>Categories</h4>
                     <i className='fas fa-chevron-down'></i>
                   </div>
                 </div>
@@ -105,31 +154,17 @@ const ProductsPage = () => {
                 >
                   <div className='card-body py-0'>
                     <ul className='list-unstyled'>
-                      <li>
-                        <a href='#' className='py-2 d-block text-muted'>
-                          Lorem ipsum
-                        </a>
-                      </li>
-                      <li>
-                        <a href='#' className='py-2 d-block text-muted'>
-                          Lorem ipsum
-                        </a>
-                      </li>
-                      <li>
-                        <a href='#' className='py-2 d-block text-muted'>
-                          Lorem ipsum
-                        </a>
-                      </li>
-                      <li>
-                        <a href='#' className='py-2 d-block text-muted'>
-                          Lorem ipsum
-                        </a>
-                      </li>
-                      <li>
-                        <a href='#' className='py-2 d-block text-muted'>
-                          Lorem ipsum
-                        </a>
-                      </li>
+                      {categories.map((category) => (
+                        <li key={category}>
+                          <button
+                            onClick={() => setSelectedCategory(category)}
+                            type='button'
+                            className='btn py-2 d-block text-muted border-none'
+                          >
+                            {category}{' '}
+                          </button>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -236,20 +271,26 @@ const ProductsPage = () => {
           </div>
           <div className='col-md-8'>
             <div className='row'>
-              {products.map((product) => (
-                <div className='col-md-6'>
+              {filteredProducts.map((product) => (
+                <div key={product.id} className='col-md-6'>
                   <div className='card border-0 mb-4 position-relative position-relative'>
                     <img
                       src={product.imageUrl}
                       className='card-img-top rounded-0'
                       alt={product.title}
                     />
-                    <a href='#' className='text-dark'>
+                    <button
+                      onClick={() => toggleWishListItem(product.id)}
+                      type='button'
+                      className='btn border-none text-dark'
+                    >
                       <i
-                        className='far fa-heart position-absolute'
+                        className={`${
+                          wishList[product.id] ? 'fas' : 'far'
+                        } fa-heart position-absolute`}
                         style={{ right: '16px', top: '16px' }}
                       ></i>
-                    </a>
+                    </button>
                     <div className='card-body p-0'>
                       <h4 className='mb-0 mt-3'>
                         <Link to={`/products/${product.id}`}>

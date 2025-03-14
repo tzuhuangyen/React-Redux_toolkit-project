@@ -4,6 +4,8 @@ const API_PATH = import.meta.env.VITE_API_hexAPIPath;
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import ReactLoading from 'react-loading';
+import { useDispatch } from 'react-redux';
+import { updateCartData } from '../redux/cardSlice';
 
 const ProductDetailPage = () => {
   const [product, setProduct] = useState({});
@@ -11,6 +13,20 @@ const ProductDetailPage = () => {
   const { id: product_id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isScreenLoading, setIsScreenLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const getCart = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/${API_PATH}/cart`);
+      console.log('取得購物車成功:', res.data); // 除錯用
+      dispatch(updateCartData(res.data.data));
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
   //產品列表 getProducts
   useEffect(() => {
     const getProduct = async () => {
@@ -44,6 +60,7 @@ const ProductDetailPage = () => {
           qty: Number(qty),
         },
       });
+      getCart();
       console.log('加入購物車成功:', res.data); // 除錯用
       alert(res.data.message);
     } catch (error) {
@@ -118,9 +135,11 @@ const ProductDetailPage = () => {
             </nav>
             <h2 className='fw-bold h1 mb-1'>{product.title}</h2>
             <p className='mb-0 text-muted text-end'>
-              <del>NT${product.origin_price}</del>
+              <del>NT${product.origin_price?.toLocaleString()}</del>
             </p>
-            <p className='h4 fw-bold text-end'>NT${product.price}</p>
+            <p className='h4 fw-bold text-end'>
+              NT${product.price?.toLocaleString()}
+            </p>
             <div className='row align-items-center'>
               <div className='col-6'>
                 <div className='input-group my-3 bg-light rounded'>

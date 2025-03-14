@@ -7,11 +7,16 @@ import ReactLoading from 'react-loading';
 import { Link } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_API_hexAPIUrl;
 const API_PATH = import.meta.env.VITE_API_hexAPIPath;
+import Swiper from 'swiper';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 const CartPage = () => {
   const [isScreenLoading, setIsScreenLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [cart, setCart] = useState({});
+  const swiperRef = useRef(null);
+
   const getCart = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/${API_PATH}/cart`);
@@ -19,8 +24,26 @@ const CartPage = () => {
       setCart(res.data.data || {});
     } catch (error) {}
   };
+
   useEffect(() => {
     getCart();
+
+    new Swiper(swiperRef.current, {
+      modules: [Autoplay],
+      loop: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      slidesPerView: 2,
+      spaceBetween: 10,
+      breakpoints: {
+        767: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+    });
   }, []);
 
   //remove all cart item
@@ -311,8 +334,8 @@ const CartPage = () => {
             </div>
           </div>
           <div className='my-5'>
-            <h3 className='fw-bold'>Lorem ipsum dolor sit amet</h3>
-            <div className='swiper-container mt-4 mb-5'>
+            <h3 className='fw-bold'>Recommend</h3>
+            <div ref={swiperRef} className='swiper mt-4 mb-5'>
               <div className='swiper-wrapper'>
                 <div className='swiper-slide'>
                   <div className='card border-0 mb-4 position-relative position-relative'>
